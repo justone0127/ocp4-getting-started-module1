@@ -64,7 +64,7 @@ image::devops_pipeline_builder_yaml.png[Pipeline builder의 YAML view 편집 화
 ====
 **Java**
 
-여기에서 이 Tekton Pipeline을 YAML 텍스트 영역에 복사할 수 있습니다. 이 파이프라인은 로컬 Git 서버(Gitea)에서 소스 코드를 클론하고, 애플리케이션을 빌드 및 테스트한 후, 컨테이너 이미지를 빌드하여 OpenShift에 배포합니다.
+여기에서 이 Tekton Pipeline을 YAML 텍스트 영역에 복사할 수 있습니다. 이 파이프라인은 GitHub 저장소에서 소스 코드를 클론하고, 애플리케이션을 빌드 및 테스트한 후, 컨테이너 이미지를 빌드하여 OpenShift에 배포합니다.
 
 [source,yaml,role="copypaste",subs="attributes"]
 ----
@@ -77,7 +77,7 @@ spec:
     - default: nationalparks
       name: APP_NAME
       type: string
-    - default: {ocp4_starter_gitea_url}/{ocp4_starter_gitea_user}/nationalparks.git
+    - default: {ocp4_starter_nationalparks_repo}.git
       description: The application git repository url
       name: APP_GIT_URL
       type: string
@@ -103,8 +103,14 @@ spec:
         - name: VERBOSE
           value: 'true'
       taskRef:
-        kind: Task
-        name: git-clone
+        resolver: cluster
+        params:
+          - name: kind
+            value: task
+          - name: name
+            value: git-clone
+          - name: namespace
+            value: openshift-pipelines
       workspaces:
         - name: output
           workspace: app-source
@@ -120,8 +126,14 @@ spec:
       runAfter:
         - git-clone
       taskRef:
-        kind: Task
-        name: maven
+        resolver: cluster
+        params:
+          - name: kind
+            value: task
+          - name: name
+            value: maven
+          - name: namespace
+            value: openshift-pipelines
       workspaces:
         - name: source
           workspace: app-source
@@ -146,8 +158,14 @@ spec:
       runAfter:
         - build-and-test
       taskRef:
-        kind: Task
-        name: buildah
+        resolver: cluster
+        params:
+          - name: kind
+            value: task
+          - name: name
+            value: buildah
+          - name: namespace
+            value: openshift-pipelines
       workspaces:
         - name: source
           workspace: app-source
@@ -158,12 +176,20 @@ spec:
       runAfter:
         - build-image
       taskRef:
-        kind: Task
-        name: openshift-client
+        resolver: cluster
+        params:
+          - name: kind
+            value: task
+          - name: name
+            value: openshift-client
+          - name: namespace
+            value: openshift-pipelines
   workspaces:
     - name: app-source
     - name: maven-settings
 ----
+
+NOTE: `taskRef`의 `resolver: cluster`는 여러분의 Project가 아니라 `openshift-pipelines` namespace에 OpenShift Pipelines가 미리 설치해 둔 공용 Task(`git-clone`, `maven`, `buildah`, `openshift-client`)를 가져와 사용한다는 뜻입니다. Developer Sandbox처럼 여러 사용자가 함께 쓰는 클러스터에서도 각자 Task를 설치할 필요 없이 같은 Task를 재사용할 수 있습니다.
 
 이제 다시 **Pipeline builder** 화면으로 돌아가서 시각적으로 확인해 보겠습니다.
 

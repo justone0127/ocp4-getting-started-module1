@@ -85,9 +85,8 @@ metadata:
     component: parksmap
     role: frontend
   name: parksmap
-  namespace: workshop
+  namespace: <사용자명>-dev
   resourceVersion: "1062269"
-  selfLink: /api/v1/namespaces/workshop/services/parksmap
   uid: e1ff69c8-cb2f-11e9-82a1-0267eec7e1a0
 spec:
   clusterIP: 172.30.22.209
@@ -146,7 +145,7 @@ oc describe service parksmap
 [source,text]
 ----
 Name:              parksmap
-Namespace:         workshop
+Namespace:         <사용자명>-dev
 Labels:            app=workshop
                    app.kubernetes.io/component=parksmap
                    app.kubernetes.io/instance=parksmap
@@ -299,6 +298,8 @@ oc get route
 NAME       HOST/PORT                                                           PATH   SERVICES   PORT       TERMINATION   WILDCARD
 parksmap   parksmap-{ocp4_starter_project}.{ocp4_starter_apps_domain}          parksmap   8080-tcp   edge          None
 ----
+
+NOTE: ``HOST/PORT``의 도메인 부분은 Sandbox 클러스터마다 다릅니다. 여러분의 터미널에 표시된 실제 주소를 사용하세요. 다음 명령으로 브라우저에 붙여넣을 수 있는 전체 URL만 출력할 수도 있습니다: ``echo https://$(oc get route parksmap -o jsonpath='{.spec.host}')``
 
 ``parksmap`` Deployment의 **Topology** 화면에서 **Resources** 탭 아래로도 **Route**를 확인할 수 있습니다. Topology에서 ``parksmap`` 노드에 화살표 아이콘이 생긴 것을 확인하세요. 이를 클릭하면 브라우저에서 **Route**의 URL이 열립니다.
 

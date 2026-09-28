@@ -182,7 +182,34 @@ parksmap 프런트엔드 앱이 OpenShift project 내의 **Route**와 **Service*
 ``type=parksmap-backend``라는 **Label**을 가지고 있다면, 해당 엔드포인트에서 지도 데이터를 조회하도록 만들어져 있기 때문입니다.
 (이 작업을 수행하는 코드는 link:{ocp4_starter_openshift_roadshow}/parksmap-web/blob/master/src/main/java/com/openshift/evg/roadshow/rest/RouteWatcher.java#L20[RouteWatcher.java 파일^]에서 확인할 수 있습니다.)
 
-NOTE: (내용이 길기 때문에 읽지 않으셔도 좋습니다!) API Gateway 역할을 하는 구성 요소가 백엔드 목록을 얻기 위해 어떤 API를 조회하는 것 자체는 흔한 패턴입니다(Consul, Eureka 같은 서비스 레지스트리가 대표적입니다). 다만 **parksmap 프런트앱이 조금 특이한 부분**은, 이런 용도의 별도 서비스 레지스트리를 두는 대신 **Kubernetes/OpenShift의 컨트롤 플레인 API(Route/Service 오브젝트)를 직접 애플리케이션 수준의 서비스 레지스트리처럼 사용**한다는 것입니다. 그러려면 애플리케이션이 Route의 Label을 조회할 수 있는 권한이 있어야 하는데, 이 권한을 직접 설정하는 실습은 이 워크숍 범위에서 생략되었고 실습 환경에 미리 구성해 두었습니다. **대부분의 서비스는 이 정도로 넓은 API 조회 권한이 필요 없고, 연결할 서비스 이름을 환경 변수로 전달받아 Kubernetes DNS로 호출하는 것으로 충분합니다**(예: 이 워크숍에서 ``nationalparks``가 ``MONGODB_SERVER_HOST`` 환경 변수로 ``mongodb``를 찾았던 것처럼). parksmap 프런트엔드 앱처럼 "관리자가 새로운 백엔드를 언제든 추가/제거해도 재배포 없이 자동으로 찾아서 보여줘야" 하는 동적 애그리게이터 역할을 위해, 오늘날에는 서비스 메시(Istio 등)가 이런 문제를 애플리케이션 코드 밖에서 더 깔끔하게 풀어주기도 합니다. 이 개념은 이후 실습에서 다루게 됩니다.
+NOTE: (내용이 길기 때문에 읽지 않으셔도 좋습니다!) API Gateway 역할을 하는 구성 요소가 백엔드 목록을 얻기 위해 어떤 API를 조회하는 것 자체는 흔한 패턴입니다(Consul, Eureka 같은 서비스 레지스트리가 대표적입니다). 다만 **parksmap 프런트앱이 조금 특이한 부분**은, 이런 용도의 별도 서비스 레지스트리를 두는 대신 **Kubernetes/OpenShift의 컨트롤 플레인 API(Route/Service 오브젝트)를 직접 애플리케이션 수준의 서비스 레지스트리처럼 사용**한다는 것입니다. 그러려면 애플리케이션이 Route의 Label을 조회할 수 있는 권한이 있어야 하는데, 이 권한은 바로 아래 실습에서 직접 부여합니다. **대부분의 서비스는 이 정도로 넓은 API 조회 권한이 필요 없고, 연결할 서비스 이름을 환경 변수로 전달받아 Kubernetes DNS로 호출하는 것으로 충분합니다**(예: 이 워크숍에서 ``nationalparks``가 ``MONGODB_SERVER_HOST`` 환경 변수로 ``mongodb``를 찾았던 것처럼). parksmap 프런트엔드 앱처럼 "관리자가 새로운 백엔드를 언제든 추가/제거해도 재배포 없이 자동으로 찾아서 보여줘야" 하는 동적 애그리게이터 역할을 위해, 오늘날에는 서비스 메시(Istio 등)가 이런 문제를 애플리케이션 코드 밖에서 더 깔끔하게 풀어주기도 합니다. 이 개념은 이후 실습에서 다루게 됩니다.
+
+[#grant_view_to_parksmap]
+=== 실습: parksmap에 Route 조회 권한 부여하기
+
+``parksmap``은 Project 안에서 ``default`` **Service Account**로 실행됩니다. Service Account는 사람이 아닌 애플리케이션(Pod)이 OpenShift API를 호출할 때 사용하는 계정입니다. 기본 상태의 ``default`` Service Account에는 Route를 조회할 권한이 없으므로, ``parksmap``이 ``type=parksmap-backend`` Label이 붙은 Route를 찾을 수 있도록 여러분의 Project 안에서만 유효한 ``view``(읽기 전용) 권한을 부여합니다.
+
+[source,bash,role="copypaste"]
+----
+oc policy add-role-to-user view -z default
+----
+
+[.console-output]
+[source]
+----
+clusterrole.rbac.authorization.k8s.io/view added: "default"
+----
+
+NOTE: ``-z`` 플래그는 현재 Project의 Service Account를 지정하는 단축 표기입니다. ``system:serviceaccount:<사용자명>-dev:default``를 전부 입력하지 않아도 됩니다. 이 권한은 RoleBinding으로 만들어지므로 여러분의 Project 안에서만 적용되며, 다른 사용자의 Project에는 아무런 영향을 주지 않습니다.
+
+권한은 ``parksmap``이 시작될 때 읽어 들이므로, ``parksmap``을 재시작해 새 권한이 적용되게 합니다:
+
+[source,bash,role="copypaste"]
+----
+oc rollout restart deployment/parksmap
+----
+
+웹 콘솔의 **User Management → RoleBindings**에서도 새로 생긴 ``view`` 항목을 확인할 수 있습니다.
 
 [#monitoring-the-build]
 === 빌드 모니터링하기
@@ -257,7 +284,7 @@ nationalparks   nationalparks-{ocp4_starter_project}.{ocp4_starter_apps_domain} 
 parksmap        parksmap-{ocp4_starter_project}.{ocp4_starter_apps_domain}           parksmap        8080-tcp        edge        none
 ----
 
-위 예시에서 URL은 다음과 같습니다:
+위 예시에서 nationalparks의 URL은 다음과 같은 형태입니다:
 
 [.console-output]
 [source,subs="+attributes"]
@@ -265,11 +292,23 @@ parksmap        parksmap-{ocp4_starter_project}.{ocp4_starter_apps_domain}      
 https://nationalparks-{ocp4_starter_project}.{ocp4_starter_apps_domain}
 ----
 
+도메인 부분은 Sandbox 클러스터마다 다르므로, 위 출력에 표시된 여러분의 실제 주소를 사용하세요.
+
 이는 백엔드 애플리케이션이므로 실제 웹 인터페이스는 없습니다.
 그러나 브라우저로도 사용해 볼 수 있습니다. parksmap 프런트엔드와 함께 동작하는 모든 백엔드는
-``/ws/info/`` 엔드포인트를 구현해야 합니다. 테스트하려면 브라우저에서 다음 URL을 방문하세요:
+``/ws/info/`` 엔드포인트를 구현해야 합니다. 다음 명령으로 여러분의 ``/ws/info/`` URL을 출력한 뒤, 브라우저에 붙여넣어 방문하세요:
 
-link:https://nationalparks-{ocp4_starter_project}.{ocp4_starter_apps_domain}/ws/info/[National Parks Info Page^]
+[source,bash,role="copypaste"]
+----
+echo https://$(oc get route nationalparks -o jsonpath='{.spec.host}')/ws/info/
+----
+
+브라우저 대신 웹 터미널에서 바로 확인할 수도 있습니다:
+
+[source,bash,role="copypaste"]
+----
+curl -s https://$(oc get route nationalparks -o jsonpath='{.spec.host}')/ws/info/
+----
 
 WARNING: Pod가 Running 상태인데도 애플리케이션이 사용 불가능하다면, 아직 Health Check를 구성하지 않았기 때문이니 몇 초 기다렸다가 페이지를 새로고침해 보세요.
 

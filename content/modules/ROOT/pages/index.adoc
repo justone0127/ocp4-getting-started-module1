@@ -7,6 +7,8 @@ include::vars.adoc[]
 
 이 워크샵은 개발자의 관점에서 OpenShift를 실습 중심으로 소개합니다. 실제로 손으로 해보는 대화형 실습을 통해, OpenShift 플랫폼에서 컨테이너화된 애플리케이션을 빌드하고 배포하고 관리하는 방법을 배웁니다.
 
+모든 실습은 **Red Hat Developer Sandbox**에서 진행하며, Sandbox가 여러분에게 제공하는 Project(``<사용자명>-dev``) 하나에 애플리케이션을 배포합니다.
+
 == 배우게 될 내용
 
 **OpenShift 접속하기:**
@@ -38,9 +40,8 @@ include::vars.adoc[]
 * ConfigMap과 Secret으로 애플리케이션 설정을 코드와 분리하기
 * Readiness/Liveness/Startup Probe로 애플리케이션 상태를 확인하고 자동으로 복구하기
 * StatefulSet으로 안정적인 네트워크 식별자가 필요한 워크로드 배포하기
-* DaemonSet으로 모든 노드에 에이전트를 배포하기
-* Requests/Limits와 ResourceQuota로 컨테이너와 프로젝트의 자원 사용량 관리하기
-* Pod Anti-Affinity와 Toleration으로 Pod가 배치되는 노드를 제어하기
+* Requests/Limits로 컨테이너의 자원 사용량 관리하기
+* Pod Anti-Affinity로 Pod가 배치되는 노드를 제어하기
 
 **협업과 자동화:**
 

@@ -1,20 +1,21 @@
 // Here are the variables used in the asciidoc / antora content.
 // They are defined here to decouple the vars injected in antora.yaml.
-:ocp4_starter_console_url: {openshift_console_url}
-:ocp4_starter_apps_domain: {openshift_cluster_ingress_domain}
-:ocp4_starter_username: {user}
-:ocp4_starter_password: {password}
-:ocp4_starter_login: {login_command}
-:ocp4_starter_project: wksp-{user}
-:ocp4_starter_gitea_url: {gitea_console_url}
-:ocp4_starter_gitea_password: {gitea_password}
-:ocp4_starter_gitea_user: {gitea_user}
-:ocp4_starter_cli_version: 4.20.x
-:ocp4_starter_api_url: https://api.cluster.example.com:6443
+//
+// Red Hat Developer Sandbox는 참가자마다 사용자 이름/프로젝트/클러스터 도메인이 다릅니다.
+// 아래 값 중 <...> 로 표시된 부분은 참가자가 자신의 값으로 바꿔 읽어야 하는 자리 표시자입니다.
+:ocp4_starter_sandbox_console_url: {sandbox_console_url}
+:ocp4_starter_username: {sandbox_username}
+:ocp4_starter_project: {sandbox_username}-dev
+:ocp4_starter_apps_domain: {sandbox_apps_domain}
+:ocp4_starter_github_url: {github_url}
+:ocp4_starter_cli_version: 4.x.x
+:ocp4_starter_api_url: https://api.<샌드박스-클러스터-도메인>:6443
 :ocp4_starter_roadshow_url: https://github.com/openshift-roadshow
+:ocp4_starter_nationalparks_repo: https://github.com/openshift-roadshow/nationalparks
 :ocp4_starter_parksmap_image: quay.io/openshiftroadshow/parksmap:latest
 :ocp4_starter_openshift_docs: https://docs.redhat.com/en/documentation/openshift_container_platform/4.20
 :ocp4_starter_openshift_github: https://github.com/openshift
 :ocp4_starter_openshift_roadshow: https://github.com/openshift-roadshow
 :ocp4_starter_devfile_docs: https://devfile.io/docs/2.3.0
-:ocp4_starter_showroom_url: https://github.com/rhpds/ocp4-getting-started-showroom
+:ocp4_starter_sandbox_docs: https://developers.redhat.com/learn/openshift/developer-sandbox-red-hat-openshift
+:ocp4_starter_showroom_url: https://github.com/justone0127/ocp4-getting-started-showroom

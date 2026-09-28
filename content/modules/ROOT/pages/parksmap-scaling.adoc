@@ -124,7 +124,7 @@ oc describe svc parksmap
 [source]
 ----
 Name:              parksmap
-Namespace:         wksp-user1
+Namespace:         <사용자명>-dev
 Labels:            app=workshop
                    app.kubernetes.io/component=parksmap
                    app.kubernetes.io/instance=parksmap

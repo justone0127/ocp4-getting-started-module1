@@ -29,7 +29,6 @@ apiVersion: batch/v1
 kind: Job
 metadata:
   name: nationalparks-data-load
-  namespace: {ocp4_starter_project}
 spec:
   backoffLimit: 2
   template:
@@ -41,7 +40,7 @@ spec:
           command:
             - curl
             - "-sf"
-            - "http://nationalparks.{ocp4_starter_project}.svc.cluster.local:8080/ws/data/load"
+            - "http://nationalparks:8080/ws/data/load"
 ----
 
 [.bordershadow]
@@ -86,7 +85,6 @@ apiVersion: batch/v1
 kind: CronJob
 metadata:
   name: nationalparks-data-load-template
-  namespace: {ocp4_starter_project}
 spec:
   schedule: "0 2 31 2 *"
   jobTemplate:
@@ -101,7 +99,7 @@ spec:
               command:
                 - curl
                 - "-sf"
-                - "http://nationalparks.{ocp4_starter_project}.svc.cluster.local:8080/ws/data/load"
+                - "http://nationalparks:8080/ws/data/load"
 ----
 
 NOTE: ``schedule: "0 2 31 2 *"``는 "2월 31일 새벽 2시"를 의미합니다. 2월에는 31일이 없어서 이 일정은 영원히 도래하지 않습니다. cron 표현식 자체는 유효한 값(일 1~31, 월 1~12)이라 OpenShift는 그대로 받아들이지만, 실제로 자동 트리거되는 일은 없습니다.
@@ -121,3 +119,9 @@ image::nationalparks-cronjob-run-job.png[Actions 드롭다운에서 Run Job을 �
 image::nationalparks-cronjob-created-job.png[생성된 Job을 확인하는 화면,link=self,window=blank]
 
 **Run Job**을 클릭할 때마다 이렇게 새로운 Job이 하나씩 만들어지는 것을 확인할 수 있습니다. YAML을 다시 작성할 필요 없이, 필요할 때마다 버튼 클릭 한 번으로 같은 작업을 반복 실행할 수 있는 것입니다. 실습이 끝나면 템플릿을 정리합니다:
+
+[source,bash,role="copypaste"]
+----
+oc delete cronjob nationalparks-data-load-template
+oc delete job nationalparks-data-load
+----

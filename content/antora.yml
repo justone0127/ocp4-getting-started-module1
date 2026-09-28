@@ -9,15 +9,15 @@ start_page: ROOT:index.adoc
 # DO NOT USE these vars in your asciidoc content.
 # Use the vars defined in the vars.adoc file instead.
 # These vars should be referenced only in the vars.adoc file.
+#
+# 이 워크샵은 Red Hat Developer Sandbox 환경을 기준으로 작성되었습니다.
+# Sandbox는 참가자마다 사용자 이름과 클러스터 도메인이 다르기 때문에,
+# 사용자별 값 대신 참가자가 직접 확인해서 바꿔 읽을 수 있는 자리 표시자(placeholder)를 사용합니다.
 asciidoc:
   attributes:
     page-pagination: true
     lab_name: OpenShift와 함께하는 Kubernetes 핸즈온 워크샵
-    openshift_console_url: https://console.apps.cluster.example.com
-    openshift_cluster_ingress_domain: apps.cluster.example.com
-    user: userX
-    password: password
-    login_command: oc login --insecure-skip-tls-verify=false -u userX -p password https://api.cluster.example.com:6443
-    gitea_console_url: https://gitea.apps.cluster.example.com
-    gitea_password: password
-    gitea_user: userX
+    sandbox_console_url: https://console.redhat.com/openshift/sandbox
+    sandbox_username: <사용자명>
+    sandbox_apps_domain: apps.<샌드박스-클러스터-도메인>
+    github_url: https://github.com

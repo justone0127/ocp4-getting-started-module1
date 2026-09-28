@@ -16,7 +16,7 @@ OpenShift는 모든 project에 몇 가지 특수한 service account를 자동으
 모든 Pod에 이 service account를 자동으로 주입합니다. 이 service
 account의 권한을 변경하면 추가 기능을 활성화할 수 있습니다.
 
-웹 콘솔에서 현재 권한을 확인하려면 **OCP Console** 탭의 **Topology** 화면으로 이동하여 ``parksmap`` 항목을 클릭하고, **Details** 탭으로 이동한 후 **Namespace**를 클릭합니다.
+웹 콘솔에서 현재 권한을 확인하려면 웹 콘솔의 **Topology** 화면으로 이동하여 ``parksmap`` 항목을 클릭하고, **Details** 탭으로 이동한 후 **Namespace**를 클릭합니다.
 
 [.bordershadow]
 image::parksmap-permissions-namespace.png[parksmap Details 탭에 표시된 Namespace 링크 화면,link=self,window=blank]

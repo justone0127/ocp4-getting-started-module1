@@ -65,7 +65,6 @@ apiVersion: v1
 kind: Secret
 metadata:
   name: mongodb-credentials
-  namespace: {ocp4_starter_project}
 type: Opaque
 stringData:
   admin-usr: admin
@@ -240,7 +239,6 @@ apiVersion: v1
 kind: ConfigMap
 metadata:
   name: nationalparks-config
-  namespace: {ocp4_starter_project}
 data:
   MONGODB_SERVER_HOST: mongodb
   MONGODB_DATABASE: parksapp
@@ -330,11 +328,11 @@ OpenShift에 애플리케이션을 배포할 때는, 종속 시스템에 대한 
 === 실습: 데이터, 데이터, 어디에나
 
 이제 데이터베이스가 배포되었으니, ``nationalparks`` 웹
-서비스를 다시 방문하여 데이터를 조회해 볼 수 있습니다:
+서비스를 다시 방문하여 데이터를 조회해 볼 수 있습니다. URL은 ``https://nationalparks-<사용자명>-dev.<샌드박스-클러스터-도메인>/ws/data/all`` 형태이며, 다음 명령으로 여러분의 실제 URL을 출력할 수 있습니다. 출력된 URL을 브라우저에 붙여넣어 방문하세요:
 
-[source,text,role="copypaste",subs="attributes"]
+[source,bash,role="copypaste"]
 ----
-https://nationalparks-{ocp4_starter_project}.{ocp4_starter_apps_domain}/ws/data/all
+echo https://$(oc get route nationalparks -o jsonpath='{.spec.host}')/ws/data/all
 ----
 
 결과는 어떨까요?
@@ -351,9 +349,9 @@ https://nationalparks-{ocp4_starter_project}.{ocp4_starter_apps_domain}/ws/data/
 
 nationalparks 애플리케이션은 바로 이 작업을 수행하는 엔드포인트도 제공합니다. 웹 브라우저에서 이 URL을 열어 ``nationalparks`` 애플리케이션이 MongoDB에 샘플 데이터셋을 삽입하도록 해보세요:
 
-[source,text,role="copypaste",subs="attributes"]
+[source,bash,role="copypaste"]
 ----
-https://nationalparks-{ocp4_starter_project}.{ocp4_starter_apps_domain}/ws/data/load
+echo https://$(oc get route nationalparks -o jsonpath='{.spec.host}')/ws/data/load
 ----
 
 결과는 어떨까요?
@@ -364,20 +362,15 @@ https://nationalparks-{ocp4_starter_project}.{ocp4_starter_apps_domain}/ws/data/
 Items inserted in database: 2893
 ----
 
-이제 다시 ``/ws/data/all``로 이동하면 엄청난 양의 JSON 데이터를 확인할 수 있습니다.
-
-[source,text,role="copypaste",subs="attributes"]
-----
-https://nationalparks-{ocp4_starter_project}.{ocp4_starter_apps_domain}/ws/data/all
-----
+이제 앞에서 열었던 ``/ws/data/all`` URL을 새로고침하면 엄청난 양의 JSON 데이터를 확인할 수 있습니다.
 
 NOTE: Firefox 54 같은 일부 브라우저에서는 결과 JSON을 제대로 파싱하지 못해 오류가 보고되는 경우가 있습니다. 이는 브라우저 문제이며 애플리케이션은 정상적으로 동작하고 있습니다.
 
 이제 마지막으로, 프런트엔드 앱인 parksmap URL을 방문하여 브라우저에서 지도를 다시 확인해보세요.
 
-[source,text,role="copypaste",subs="attributes"]
+[source,bash,role="copypaste"]
 ----
-https://parksmap-{ocp4_starter_project}.{ocp4_starter_apps_domain}
+echo https://$(oc get route parksmap -o jsonpath='{.spec.host}')
 ----
 
 [.bordershadow]

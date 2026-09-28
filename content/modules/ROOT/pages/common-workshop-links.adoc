@@ -3,27 +3,30 @@
 
 include::vars.adoc[]
 
-이 페이지에서 워크샵 진행 중 필요한 모든 URL, 호스트명, 사용자 이름, 비밀번호를 확인할 수 있습니다.
-
-이 URL들은 각 실습 안에도 포함되어 있으므로, 이 페이지와 실습 사이를 왔다 갔다 하지 않아도 됩니다.
-
-TIP: **OCP Console**과 **Gitea** 웹 인터페이스는 이 페이지 오른쪽의 **Terminal**과 함께 탭으로 제공됩니다. 이 창을 벗어나지 않고도 언제든지 탭을 전환할 수 있습니다.
+이 페이지에서 워크샵 진행 중 필요한 URL을 확인할 수 있습니다.
 
 [#openshift_cluster_url]
-== OpenShift 클러스터 URL
+== Developer Sandbox 웹 콘솔
 
-이 페이지 오른쪽의 **OCP Console** 탭을 클릭하여 OpenShift 콘솔에 접속하거나, 새 브라우저 탭에서 열어보세요: link:{ocp4_starter_console_url}[{ocp4_starter_console_url}^]
+link:{ocp4_starter_sandbox_console_url}[Sandbox 대시보드^]에서 **OpenShift** 카드의 **Launch** 버튼을 클릭하면 웹 콘솔로 이동합니다. 로그인 방법으로 **DevSandbox**를 선택하면 Red Hat 계정으로 로그인됩니다.
 
-**사용자 이름**: {ocp4_starter_username} +
-**비밀번호**: {ocp4_starter_password}
+**Project**: ``{ocp4_starter_project}``
 
-[#git_server]
-== Git 서버
+[#application_urls]
+== 애플리케이션 URL
 
-이 페이지 오른쪽의 **Gitea** 탭을 클릭하여 Gitea 서버에 접속하거나, 새 브라우저 탭에서 열어보세요: link:{ocp4_starter_gitea_url}[{ocp4_starter_gitea_url}^]
+실습 중 만든 Route의 실제 주소는 Sandbox 클러스터마다 다릅니다. 웹 터미널에서 다음 명령으로 확인하세요:
 
-**사용자 이름**: {ocp4_starter_gitea_user} +
-**비밀번호**: {ocp4_starter_gitea_password}
+[source,bash,role="copypaste"]
+----
+oc get routes -o custom-columns=NAME:.metadata.name,URL:.spec.host
+----
+
+[#git_repository]
+== Git 저장소
+
+* nationalparks 원본 저장소: link:{ocp4_starter_nationalparks_repo}[{ocp4_starter_nationalparks_repo}^]
+* (보너스 실습) 위 저장소를 fork한 여러분의 GitHub 저장소: ``https://github.com/<GitHub-사용자명>/nationalparks``
 
 [#workshop_guides]
 == 워크샵 가이드

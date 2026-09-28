@@ -1,105 +1,50 @@
-= OpenShift 접속하기
-:navtitle: OpenShift 접속하기
+= Project 이해하기
+:navtitle: Project 이해하기
 
 include::vars.adoc[]
 
-WARNING: 실습을 본격적으로 시작하기 전에, 이 모듈에 따라 웹콘솔 및 터미널에 로그인을 진행해주세요. 그리고 웹콘솔과 터미널에서 여러분의 Project({ocp4_starter_project})를 선택했는지도 확인해주세요.
+WARNING: 이 워크샵은 **Red Hat Developer Sandbox** 환경에서 진행합니다. 실습을 시작하기 전에 Sandbox의 OpenShift 웹 콘솔에 로그인되어 있는지 확인해 주세요.
 
-OpenShift는 플랫폼과 상호작용하기 위한 두 가지 주요 인터페이스를 제공합니다. 시각적 관리를 위한 웹 기반 콘솔과 스크립팅 및 고급 작업을 위한 명령줄 인터페이스입니다. 이 섹션에서는 두 도구에 접근하고 효과적으로 사용하는 방법을 배운 다음, 이 두 도구로 OpenShift의 핵심 개념인 Project를 살펴봅니다.
+TIP: 이 가이드의 ``oc`` 명령어는 웹 콘솔 오른쪽 상단의 **>_** (웹 터미널) 아이콘을 눌러 열리는 터미널에서 실행하면 됩니다. 웹 터미널은 이미 로그인된 상태로 열리므로 ``oc login``이 필요 없습니다. 오랫동안 사용하지 않아 터미널이 종료되었다면 아이콘을 다시 눌러 새로 열면 됩니다.
 
-[#the_web_console]
-== 웹 콘솔
+[#project]
+== Project란?
 
-OpenShift 콘솔은 Project, 애플리케이션, 클러스터 리소스를 관리할 수 있는 직관적인 그래픽 인터페이스를 제공합니다. 최신 웹 브라우저에서 접근할 수 있으며, 일반적인 관리 및 개발 작업을 간소화하도록 설계되었습니다.
+Project는 배포를 구성하고 관리하는 데 도움을 주는 OpenShift의 핵심 개념입니다. OpenShift Project를 사용하면 한 그룹의 사용자(또는 개인 사용자)가 다른 그룹과 분리된 상태로 자신의 콘텐츠를 구성하고 관리할 수 있습니다. 각 Project는 고유한 리소스, 정책(누가 어떤 작업을 수행할 수 있는지 정의), 제약 조건(리소스에 대한 쿼터 및 제한 등)을 가집니다.
 
-=== OpenShift 웹 콘솔 접속하기
+Project는 여러분(또는 여러분의 팀)이 작업에 사용하는 모든 애플리케이션 서비스와 엔드포인트를 감싸는 "래퍼(wrapper)"라고 생각하면 됩니다. 내부적으로 OpenShift Project는 Kubernetes 네임스페이스(namespace) 위에 구축되지만, Project 추상화는 관리자에게 향상된 역할 기반 접근 제어(RBAC) 같은 추가 기능을 제공합니다.
 
-[.bordershadow]
-image::openshift-console-login.png[OpenShift 웹 콘솔 로그인 화면,width=500,link=self,window=blank]
+Developer Sandbox는 바로 이 Project 기능을 이용해 하나의 클러스터를 여러 사용자가 안전하게 나눠 쓰도록 만든 환경입니다. Sandbox에 가입하면 **``{ocp4_starter_project}``** 형식의 Project가 여러분을 위해 하나 자동으로 생성되어 있습니다. 예를 들어 사용자 이름이 ``jdoe``라면 Project 이름은 ``jdoe-dev``입니다. 여러분이 만드는 모든 리소스는 이 Project 안에만 존재하며, 다른 사용자의 Project에서는 보이지 않습니다.
 
-OpenShift 콘솔에 접속하려면 이 페이지 오른쪽의 **OCP Console** 탭을 클릭한 후 제공된 자격 증명으로 로그인합니다.
+NOTE: Sandbox에서는 새 Project를 추가로 만들 수 없습니다(``oc new-project`` 명령이 거부됩니다). 이 워크샵의 모든 실습은 자동으로 만들어진 ``{ocp4_starter_project}`` Project 하나에서 진행합니다.
 
-[.bordershadow]
-TIP: 모니터 화면이 작아서 불편한 경우, 오른쪽 상단의 'Tabs'를 누르면 가이드 문서가 접히고 웹콘솔 화면만 볼 수 있습니다. 그리고 다시 Instruction이나 Split를 누르면 가이드 문서를 다시 볼 수 있습니다.
+IMPORTANT: 이 가이드에서 ``<사용자명>``, ``<샌드박스-클러스터-도메인>``처럼 꺾쇠괄호(``< >``)로 표시된 부분은 **여러분의 실제 값으로 바꿔 읽어야 하는 자리 표시자**입니다. 복사해서 바로 실행하는 명령어는 가능한 한 이런 값이 필요 없도록 작성되어 있습니다.
 
-**사용자 이름:** ``{user}``
+[#project_console]
+== 실습: 웹 콘솔에서 Project 확인하기
 
-**비밀번호:** ``{ocp4_starter_password}``
-
-새 브라우저 탭에서 열고 싶다면: link:{ocp4_starter_console_url}[{ocp4_starter_console_url}^]
-
-로그인하면 Project를 확인하고 플랫폼의 기능을 탐색할 수 있는 기본 대시보드가 표시됩니다.
+왼쪽 메뉴의 **Home → Projects**에서 여러분의 Project(``{ocp4_starter_project}``)를 클릭합니다. Project 개요를 살펴보면서 Project의 리소스와 활동에 대한 요약을 확인해 보세요.
 
 [.bordershadow]
-image::openshift-console-dashboard.png[로그인 후 표시되는 OpenShift 웹 콘솔 기본 대시보드,link=self,window=blank]
+image::openshift-console-project.png[OpenShift 웹 콘솔의 Project 개요 화면,link=self,window=blank]
 
-[#command_line_interface]
-== 명령줄 인터페이스
+=== 토폴로지 뷰
 
-웹 콘솔이 시각적 관리에 훌륭한 도구이긴 하지만, OpenShift CLI(``oc``)는 자동화 기능과 고급 기능에 대한 접근을 제공합니다. 이 CLI는 Go로 작성된 단일 실행 파일이며 Microsoft Windows, macOS, Linux에서 사용할 수 있습니다.
+Project 내의 애플리케이션과 그 구성 요소를 시각적으로 표현해 주는 토폴로지 화면을 살펴보세요.
 
-=== CLI 설치 확인하기
-
-CLI는 워크샵 환경에 미리 설치되어 있습니다. 오른쪽에서 Terminal 탭을 눌러 사용 가능한지 확인하고 버전을 확인해 보세요.
-**오른쪽의 노란색 아이콘을 클릭하면 명령어가 복사됩니다.**
-
-[source,bash,role="copypaste",subs="attributes"]
-----
-oc version
-----
-
-다음과 유사한 출력이 표시됩니다:
-
-[.console-output]
-[source,subs="attributes"]
-----
-Client Version: {ocp4_starter_cli_version}
-Kustomize Version: v5.6.0
-Kubernetes Version: v1.33.x
-----
-
-=== CLI로 로그인하기
-
-명령줄을 사용하여 OpenShift 클러스터에 인증합니다:
-
-[source,bash,role="copypaste",subs="attributes"]
-----
-{ocp4_starter_login}
-----
-
-이 명령은 사용자 이름과 비밀번호를 사용하여 클러스터에 인증합니다. ``Use insecure connections? (y/n):`` 라는 메시지가 뜨면 y를 입력하세요.
-
-NOTE: "The server uses a certificate signed by an unknown authority."라는 메시지가 표시되어도 이 워크샵 환경에서는 무시해도 됩니다.
-이는 클러스터의 API 인증서가 자체 서명(self-signed)되었음을 나타내며, 개발 및 테스트 환경에서는 흔한 경우입니다.
+왼쪽 메뉴에서 **워크로드(Workloads)** 로 이동한 후 **토폴로지(Topology)** 를 선택합니다. 화면 위쪽의 **Project** 드롭다운에서 ``{ocp4_starter_project}``가 선택되어 있는지 확인합니다.
 
 [.bordershadow]
+image::openshift-console-topology.png[애플리케이션 구성 요소를 시각적으로 보여주는 토폴로지 화면,link=self,window=blank]
 
-TIP: 또는 토큰을 사용하여 인증할 수도 있습니다. 토큰을 얻으려면 아래와 같이 OpenShift 웹 콘솔에서 **Copy login command** 옵션을 사용하세요.
+아직 애플리케이션을 배포하지 않았기 때문에 현재는 애플리케이션 구성 요소가 거의 보이지 않습니다(웹 터미널을 열었다면 웹 터미널용 구성 요소가 보일 수 있지만 무시해도 됩니다). 워크샵을 진행하면서 이 **토폴로지** 화면에서 애플리케이션의 구성 요소를 시각화하고 상호작용할 수 있게 됩니다.
 
-[.bordershadow]
-image::openshift-console-login-command.png[웹 콘솔의 Copy login command 옵션 화면,link=self,window=blank]
+[#project_cli]
+== 실습: 명령줄로 Project 확인하기
 
-=== 접근 권한 확인하기
+OpenShift CLI를 사용해서도 Project와 상호작용할 수 있습니다. 웹 터미널에서 내가 접근할 수 있는 Project 목록을 확인합니다:
 
-인증이 제대로 되었는지, 그리고 할당된 리소스에 접근할 수 있는지 확인해 보겠습니다.
-
-먼저 로그인 자격 증명을 확인합니다:
-[source,bash,role="copypaste",subs="attributes"]
-----
-oc whoami
-----
-
-사용자 이름이 표시됩니다:
-
-[.console-output]
-[source,subs="attributes"]
-----
-{ocp4_starter_username}
-----
-
-다음으로 나에게 할당된 Project를 볼 수 있는지 확인합니다.
-다음 명령어는 현재 내가 접근할 수 있는 모든 project들의 목록을 확인합니다.
-[source,bash,role="copypaste",subs="attributes"]
+[source,bash,role="copypaste"]
 ----
 oc projects
 ----
@@ -109,61 +54,43 @@ oc projects
 [.console-output]
 [source,subs="attributes"]
 ----
-You have one project on this server: "Workspace ({ocp4_starter_project})".
+You have one project on this server: "{ocp4_starter_project}".
 
 Using project "{ocp4_starter_project}" on server "{ocp4_starter_api_url}".
 ----
 
-훌륭합니다! 이제 웹 콘솔과 명령줄 인터페이스 모두를 통해 OpenShift에 접근할 수 있게 되었습니다. 다음으로는 이 두 도구를 사용해 OpenShift Project를 살펴보겠습니다.
+현재 어떤 Project에서 작업하고 있는지만 간단히 확인하려면 다음 명령을 사용합니다:
 
-[#project]
-== Project 이해하기
-
-Project는 배포를 구성하고 관리하는 데 도움을 주는 OpenShift의 핵심 개념입니다. OpenShift Project를 사용하면 한 그룹의 사용자(또는 개인 사용자)가 다른 그룹과 분리된 상태로 자신의 콘텐츠를 구성하고 관리할 수 있습니다. 각 Project는 고유한 리소스, 정책(누가 어떤 작업을 수행할 수 있는지 정의), 제약 조건(리소스에 대한 쿼터 및 제한 등)을 가집니다.
-
-Project는 여러분(또는 여러분의 팀)이 작업에 사용하는 모든 애플리케이션 서비스와 엔드포인트를 감싸는 "래퍼(wrapper)"라고 생각하면 됩니다. 내부적으로 OpenShift Project는 Kubernetes 네임스페이스(namespace) 위에 구축되지만, Project 추상화는 관리자에게 향상된 역할 기반 접근 제어(RBAC) 같은 추가 기능을 제공합니다.
-
-이 섹션에서는 앞서 익힌 웹 콘솔과 명령줄 인터페이스를 모두 사용하여 Project로 작업하는 방법을 살펴봅니다. 모든 용어를 이해하지 못해도 걱정하지 마세요. 이러한 개념은 워크샵 전체에 걸쳐 자세히 다룰 것입니다.
-
-=== 웹 콘솔에서 Project 살펴보기
-
-**{ocp4_starter_project}**라는 이름의 Project가 이미 여러분을 위해 생성되어 있습니다. 이 페이지 오른쪽의 **OCP Console** 탭을 통해 살펴보는 것부터 시작해 보세요.
-
-OpenShift 웹 콘솔에 로그인한 후, 프로젝트 목록에서 여러분의 Project({ocp4_starter_project})를 찾아 클릭합니다. Project 개요를 살펴보면서 Project의 리소스와 활동에 대한 요약을 확인해 보세요.
-
-[.bordershadow]
-image::openshift-console-project.png[OpenShift 웹 콘솔의 Project 개요 화면,link=self,window=blank]
-
-==== 토폴로지 뷰
-
-Project 내의 애플리케이션과 그 구성 요소를 시각적으로 표현해 주는 토폴로지 화면을 살펴보세요.
-
-왼쪽 메뉴에서 **워크로드(Workload)**로 이동한 후 **토폴로지(Topology)**를 선택합니다.
-
-[.bordershadow]
-image::openshift-console-topology.png[애플리케이션 구성 요소를 시각적으로 보여주는 토폴로지 화면,link=self,window=blank]
-
-아직 아무것도 배포하지 않았기 때문에 현재는 애플리케이션이나 구성 요소가 보이지 않습니다. 워크샵을 진행하면서 이 **토폴로지** 화면에서 애플리케이션의 구성 요소를 시각화하고 상호작용할 수 있게 됩니다.
-
-=== 명령줄로 Project 다루기
-
-OpenShift CLI를 사용해서도 Project와 상호작용할 수 있으며, 이를 통해 자동화 기능과 고급 기능에 접근할 수 있습니다.
-
-웹 터미널에서 다음 명령을 사용하여 여러분의 Project로 전환합니다:
-
-[source,bash,role="copypaste",subs="attributes"]
+[source,bash,role="copypaste"]
 ----
-oc project {ocp4_starter_project}
+oc project -q
 ----
-
-다음과 유사한 출력이 표시됩니다:
 
 [.console-output]
 [source,subs="attributes"]
 ----
-Now using project "{ocp4_starter_project}" on server "{ocp4_starter_api_url}"
+{ocp4_starter_project}
 ----
 
-이 명령은 현재 컨텍스트를 {ocp4_starter_project} Project 내에서 작업하도록 설정합니다. 별도로 지정하지 않는 한, 이후의 모든 ``oc`` 명령은 이 Project 범위 내에서 동작합니다.
+별도로 지정하지 않는 한, 이후의 모든 ``oc`` 명령은 이 Project 범위 내에서 동작합니다. 만약 다른 Project가 선택되어 있다면 ``oc project <사용자명>-dev`` 명령으로 전환합니다.
 
-이제 Project와 그것에 접근하는 두 가지 방법에 익숙해졌으니, 애플리케이션 배포를 시작할 준비가 되었습니다!
+[#sandbox_limits]
+== 배경 지식: Sandbox Project의 제약 사항
+
+Sandbox는 여러 사용자가 함께 쓰는 공유 클러스터이기 때문에, 여러분의 Project에는 몇 가지 제약이 미리 걸려 있습니다. 실습 도중 당황하지 않도록 미리 알아 두세요.
+
+[cols="1,3",options="header"]
+|===
+|항목 |내용
+
+|권한
+|자신의 Project 안에서만 리소스를 만들고 수정할 수 있습니다. Node처럼 클러스터 전체 범위의 리소스는 조회하거나 변경할 수 없습니다.
+
+|리소스 쿼터
+|CPU, 메모리, 스토리지 사용량의 상한이 미리 정해져 있습니다. 실습 중 Pod를 크게 늘렸다면 반드시 다시 줄여 주세요.
+
+|자동 유휴(Idling)
+|일정 시간 이상 실행된 워크로드는 자동으로 0개로 스케일 다운될 수 있습니다. 워크샵을 이어서 진행할 때 Pod가 보이지 않으면 ``oc scale --replicas=1 deployment/<이름>``으로 다시 늘려 주세요.
+|===
+
+이제 Project에 익숙해졌으니, 이 Project에 애플리케이션 배포를 시작할 준비가 되었습니다!

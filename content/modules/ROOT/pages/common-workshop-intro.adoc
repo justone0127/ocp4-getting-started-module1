@@ -22,10 +22,12 @@ link:https://www.redhat.com/en/topics/containers/whats-a-linux-container-vb[컨�
 
 image::common-environment-ocp-architecture.png[OpenShift Architecture,link=self,window=blank]
 
-이 워크샵은 퍼블릭 클라우드에서 실행되는 OpenShift 환경에서 호스팅됩니다. 이 환경은 다음과 같은 시스템으로 구성됩니다:
+이 워크샵은 Red Hat이 퍼블릭 클라우드에서 운영하는 **Red Hat Developer Sandbox** 환경에서 진행합니다. Sandbox는 여러 사용자가 하나의 OpenShift 클러스터를 함께 사용하되, 사용자마다 격리된 Project(namespace)를 하나씩 제공하는 공유 환경입니다. 이 클러스터는 다음과 같은 시스템으로 구성됩니다:
 
 * Control Plane 노드
 * Worker 노드(또는 "애플리케이션" 노드)
 * 동적 프로비저닝 스토리지
-* 프라이빗 컨테이너 레지스트리
+* 내부 컨테이너 레지스트리
 * 라우팅 레이어
+
+여러분은 클러스터 관리자가 아니라 **자신의 Project 안에서 일하는 개발자**의 입장에서 실습합니다. 그래서 노드 설정처럼 클러스터 전체에 영향을 주는 작업은 직접 해보지 않고, 개념과 동작 결과를 확인하는 방식으로 다룹니다.
