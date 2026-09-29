@@ -26,8 +26,8 @@ image::roadshow-app-architecture.png[ParksMap 애플리케이션의 마이크로
 * 전 세계 국립공원(National Parks) 정보를 제공하는 **nationalparks** Service
 * 북미 메이저리그 야구 경기장(MLB Stadiums) 정보를 제공하는 **mlbparks** Service
 
-이 워크샵에서는 이 중 **nationalparks** 하나만 직접 배포하고 실습합니다. mlbparks는 원본 애플리케이션 모음에 존재하는 백엔드이지만, 이번 워크샵의 실습 범위에는 포함되지 않습니다.
+이 워크샵에서는 프런트엔드인 **ParksMap Web**만 직접 배포하고 실습합니다. nationalparks와 mlbparks 같은 백엔드 Service는 원본 애플리케이션 모음에 존재하지만, 이번 워크샵의 실습 범위에는 포함되지 않습니다.
 
 == 백엔드는 어떻게 서로를 찾을까요?
 
-앞서 살펴본 API Gateway가 사용 가능한 모든 백엔드에 대한 통신 창구 역할을 하는데, 이때 어떤 백엔드가 존재하는지는 소스 코드에 하드코딩되어 있지 않습니다. 대신 OpenShift가 제공하는 서비스 디스커버리(service discovery) 메커니즘을 사용해, 특정 Label이 붙은 Route를 클러스터에서 동적으로 검색합니다. 즉 nationalparks Service에 올바른 Label을 붙이는 순간, ParksMap이 이를 자동으로 발견해서 지도에 표시해 줍니다. 이 Label을 실제로 붙이는 방법은 뒤에 나올 실습에서 직접 다룹니다.
+앞서 살펴본 API Gateway가 사용 가능한 모든 백엔드에 대한 통신 창구 역할을 하는데, 이때 어떤 백엔드가 존재하는지는 소스 코드에 하드코딩되어 있지 않습니다. 대신 OpenShift가 제공하는 서비스 디스커버리(service discovery) 메커니즘을 사용해, 특정 Label이 붙은 Route를 클러스터에서 동적으로 검색합니다. 즉 백엔드 Service에 올바른 Label을 붙이는 순간, ParksMap이 이를 자동으로 발견해서 지도에 표시해 줍니다. 이번 워크샵에서는 백엔드를 배포하지 않으므로, 실습에서 띄우는 지도는 마커가 없는 빈 지도로 보이게 됩니다.

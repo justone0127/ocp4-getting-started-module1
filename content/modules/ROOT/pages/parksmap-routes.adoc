@@ -312,3 +312,5 @@ NOTE: 이 페이지를 처음 여는 경우, 브라우저가 위치 정보 접�
 
 [.bordershadow]
 image::parksmap-route-empty-map.png[Route URL로 접속한 parksmap 애플리케이션의 빈 지도 화면,link=self,window=blank]
+
+NOTE: 지도에 아무 마커도 표시되지 않는 것이 정상입니다. 지도 데이터는 별도의 백엔드 Service가 제공하는데, 백엔드 배포는 이번 워크샵의 범위에 포함되어 있지 않습니다.

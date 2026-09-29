@@ -203,7 +203,7 @@ parksmap-65c4f8b676-fxcrq   1/1     Running             0          4m48s
 
 애플리케이션 프로빙(probing)에 대한 더 자세한 내용은 문서의
 link:{ocp4_starter_openshift_docs}/html/building_applications/application-health[Application Health^]
-섹션과 이 가이드의 뒷부분에서 확인할 수 있습니다.
+섹션에서 확인할 수 있습니다.
 
 [#scale_down]
 === 실습: 스케일 다운
@@ -216,4 +216,4 @@ link:{ocp4_starter_openshift_docs}/html/building_applications/application-health
 oc scale --replicas=1 deployment/parksmap
 ----
 
-WARNING: Pod를 1개로 스케일 다운하지 않으면 이후 섹션에서 예기치 않은 동작이 발생할 수 있습니다. 이는 애플리케이션이 코딩된 방식 때문이며 OpenShift와는 관련이 없습니다.
+WARNING: Sandbox Project에는 CPU/메모리 쿼터가 걸려 있습니다. 실습을 마친 뒤에는 Pod를 1개로 줄여 두어야 이어지는 실습에서 쿼터 부족으로 Pod가 뜨지 않는 문제를 피할 수 있습니다.

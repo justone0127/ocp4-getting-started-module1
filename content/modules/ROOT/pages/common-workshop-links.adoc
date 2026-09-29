@@ -22,12 +22,6 @@ link:{ocp4_starter_sandbox_console_url}[Sandbox 대시보드^]에서 **OpenShift
 oc get routes -o custom-columns=NAME:.metadata.name,URL:.spec.host
 ----
 
-[#git_repository]
-== Git 저장소
-
-* nationalparks 원본 저장소: link:{ocp4_starter_nationalparks_repo}[{ocp4_starter_nationalparks_repo}^]
-* (보너스 실습) 위 저장소를 fork한 여러분의 GitHub 저장소: ``https://github.com/<GitHub-사용자명>/nationalparks``
-
 [#workshop_guides]
 == 워크샵 가이드
 
